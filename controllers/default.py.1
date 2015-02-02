@@ -1,0 +1,119 @@
+# -*- coding: utf-8 -*-
+# this file is released under public domain and you can use without limitations
+
+#########################################################################
+## This is a sample controller
+## - index is the default action of any application
+## - user is required for authentication and authorization
+## - download is for downloading files uploaded in the db (does streaming)
+## - api is an example of Hypermedia API support and access control
+#########################################################################
+
+@auth.requires_login()
+def index():
+    """
+    example action using the internationalization operator T and flash
+    rendered by views/default/index.html or views/generic.html
+
+    if you need a simple wiki simply replace the two lines below with:
+    return auth.wiki()
+    """
+    response.flash = T("Welcome %s" %auth.user.username)
+    return dict(message=T('Hello World'))
+
+
+def user():
+    return dict(form=auth())
+
+@auth.requires_login()
+def rate_course():
+    form = SQLFORM(db.Course_rate).process(next=URL('index'))
+    return dict(form=form)
+
+@auth.requires_login()
+def rate_professor():
+    form = SQLFORM(db.Prof_rate).process(next=URL('index'))
+    return dict(form=form)
+
+@auth.requires_login()
+def all_courses():
+    courses = db().select(db.course.ALL, orderby=db.course.name)
+    return dict(courses=courses)
+
+@auth.requires_login()
+def all_professors():
+    profs = db().select(db.pr.ALL, orderby=db.pr.name)
+    return dict(profs=profs)
+
+@auth.requires_login()
+def course():
+    course=db.course(request.args(0, cast=int)) or redirect(URL('all_courses'))
+    course_rate = db.Course_rate.Title.default = course.id
+    course_data = db.Course_data.Title.default = course.id
+    comp = db(db.Course_rate.Title==course.id).select()
+    comp_sum = db.Course_rate.Comprehensibility.sum()
+    db.Course_data.Total_Comprehensibility.update(comp_sum)
+    db.comments.Course_name.default = course.id
+    form=SQLFORM(db.comments)
+    if form.process().accepted:
+        response.flash='Your comment is posted'
+    comments=db(db.comments.Course_name==course.id).select()
+    return dict(course=course, course_data=course_data, message = T('true'), comments=comments, form=form)
+
+@auth.requires_login()
+def professor():
+    professor=db.pr(request.args(0, cast=int)) or redirect(URL('all_professors'))
+    db.comments.Professor_name.default=professor.id
+    form=SQLFORM(db.comments)
+    if form.process().accepted:
+        response.flash = 'Your comment is posted'
+    comments = db(db.comments.Professor_name==professor.id).select()
+    return dict(professor=professor, message = T('true'), comments=comments, form=form)
+
+def user():
+    """
+    exposes:
+    http://..../[app]/default/user/login
+    http://..../[app]/default/user/logout
+    http://..../[app]/default/user/register
+    http://..../[app]/default/user/profile
+    http://..../[app]/default/user/retrieve_password
+    http://..../[app]/default/user/change_password
+    http://..../[app]/default/user/manage_users (requires membership in
+    use @auth.requires_login()
+        @auth.requires_membership('group name')
+        @auth.requires_permission('read','table name',record_id)
+    to decorate functions that need access control
+    """
+    return dict(form=auth())
+
+
+@cache.action()
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)
+
+
+def call():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return service()
+
+
+def api():
+    """
+    this is example of API with access control
+    WEB2PY provides Hypermedia API (Collection+JSON) Experimental
+    """
+    from gluon.contrib.hypermedia import Collection
+    rules = {
+        '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
+        }
+    return Collection(db).process(request,response,rules)

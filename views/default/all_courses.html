@@ -1,0 +1,22 @@
+{{extend 'layout.html'}}
+<head>
+    <style>
+        ul {list-style-type: none;}
+        ul {padding: 0;}
+        ul {margin: 0;}
+    </style>
+</head>
+<section>
+    <h2>All Courses</h2>
+    <ul>
+    {{for course in courses:}}
+        {{if course.id == 1:}}
+            {{=H4("Lower Division")}}
+            {{pass}}
+        {{if course.id == 23:}}
+            {{=H4("Upper Division")}}
+            {{pass}}
+        {{=LI(A(course.name, _href=URL("course", args=[course.id])))}}
+    {{pass}}
+    </ul>
+</section>

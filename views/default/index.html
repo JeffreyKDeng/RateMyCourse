@@ -1,0 +1,43 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+ 
+{{if 'message' in globals():}}
+<head>
+    <style type="text/css">
+        section {background-color: #BEBEBE;}
+        span {font-weight: bold;}
+        </style>
+</head>
+
+<section>
+<h3>Description</h3>
+<p>RateMyCourse is a community for students to provide their opinions, advice, and experience with classes they've already taken to help prospective students who are thinking of taking these classes. This is meant to help guide students plan their schedule out so they can successfully graduate and be better prepared for the future.</p>
+ 
+<h3>Here on RateMyCourse you can...</h3>
+<ol>
+  <li>Rate a class based on <span title="This category describes the learnability, or overall easiness in learning the course material. Some classes will have students yanking out their hair in frustration at how difficult it is to learn the course material, while other classes can be described as a walk in the park. Students can generally agree upon the difficulty in learning the course material, and this rating indicates to students about whether or not they can afford to take such a difficult class along with their current workload. The higher the rating, the easier the material is to learn.">learnability,</span> <span title="How difficult the course material is to learn can oftentimes be irrelevant to how well you do in the class. This category describes how easy the general student body thinks it will be to do well in the class; in other words, how easy it is to get a higher grade. The higher the rating, the easier the class is.">easiness,</span> <span title="A class can have material that is easy to learn, yet be filled with an incessant amount of work. Students often like to know how much work they will have to do in a class to avoid overloading their schedule for the school term. A rating of 5 indicates 0-5 hours/week, 4 indicates 5-10 hours/week, 3 indicates 10-15 hours/week, 2 indicates 15-20 hours/week, and 1 indicates 20+ hours/week.">workload,</span> and <span title="Some classes in a student's major curriculum are bound to be irrelevant to their life goals in the future. To avoid our precious students' time, it is important to judge a class based on its relevance to the real world. The higher the rating, the more relevant the class is to being applied in the real world.">relevance</span><li style="list-style-type: none; padding: 10px; font-style: italic">Hover over the bolded words to learn more about what we think students want from a class</li></li>
+  <li>{{=T('Rate a Professor(s) for a particualar class')}}</li>
+  <li>{{=T('Add helpful resources for a class')}}</li>
+  <li>{{=T('Add a comment on your experience in a partiular class')}}</li>
+</ol>
+</br>
+<h4>
+    Search a Course: {{=formcr}}
+</h4>
+<h4>
+    Search a Professor: {{=formpr}}
+</h4>
+
+{{elif 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
+ 
+{{block r_sidebar}}
+<b>
+{{=A(T("+ Rate a Course"), _href=URL('default','rate_course'), _class='btn',_style='margin-top: 1em;')}}
+{{=A(T("+ Rate a Professor"), _href=URL('default','rate_professor'), _class='btn',_style='margin-top: 1em;')}}
+</b>
+{{end}}
+</section>

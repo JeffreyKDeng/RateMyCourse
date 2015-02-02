@@ -1,0 +1,150 @@
+{{left_sidebar_enabled=False,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<head>
+    <style type="text/css">
+    .ratings {
+       background-color: #336666;
+       color: #000000;
+    }
+
+    .description p{
+        background-color: #33CCCC;
+       
+        padding-top: 5px;
+        padding-right: 5px;
+        padding-bottom: 5px;
+        padding-left: 5px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+     section{
+        background-color: #BEBEBE;
+     }
+        
+        section h4{
+                                background-color: #33CCCC;
+            
+                      padding-top: 5px;
+                padding-right: 5px;
+                padding-bottom: 35px;
+            padding-left: 5px;
+                    border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        }
+        section h5{
+                    background-color: #33CCCC;
+            
+                      padding-top: 5px;
+                padding-right: 5px;
+                padding-bottom: 5px;
+            padding-left: 5px;
+                    border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        }
+        section h3{
+            background-color: #355050;
+            color: #FFFFFF;
+            text-align: center;
+                    border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+            
+        }
+        section h2{
+            background-color: #355050;
+            color: #FFFFFF;
+            text-align: center;
+              padding-top: 5px;
+                padding-right: 5px;
+                padding-bottom: 5px;
+            padding-left: 5px;
+                    border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        }
+       
+    </style>
+</head>
+
+<br>
+
+<section>
+<h3>Ratings</h3>
+
+<h4>
+{{if len(Course_data):}}
+  Learnability:
+  {{=Course_data.first().Avg_Comprehensibility}}
+    <br> <br>
+    Easiness: 
+    {{=Course_data.first().Avg_Easiness}}
+    <br> <br>
+    Workload:
+    {{=Course_data.first().Avg_Struggle_Level}}
+    <br> <br>
+    Relevance:
+    {{=Course_data.first().Avg_Relativity}}
+    
+{{else:}}
+    Learnability: No ratings yet
+    <br> <br>
+    Easiness: No ratings yet
+    <br> <br>
+    Workload: No ratings yet
+    <br> <br>
+    Relevance: No ratings yet
+    {{pass}}
+</h4>
+
+</section>
+<br> <br>
+
+<h3>Post a comment</h3>
+
+{{=form}}
+
+{{block left_sidebar}}
+
+<h2>
+    {{=courses.name}}
+</h2>
+
+<br>
+<span class="description">
+<h3>
+    Description
+</h3>
+    <p>
+        
+
+{{=courses.course_description}}
+            </p>
+</span>
+
+{{end}}
+
+
+{{block right_sidebar}}
+<br><br>
+{{if len(comments):}}
+  <h3>Comments</h3><p>
+<div id="" style="overflow-y:scroll; overflow-x:hidden; height:600px;">
+  {{for comments in comments:}}
+
+    <h5>
+{{=comments.Username}} says </h5> <i>{{=comments.Body}}</i>
+  {{pass}}</p>
+</div>
+{{else:}}
+  <h3>No comments yet</h3>
+{{pass}}
+{{end}}

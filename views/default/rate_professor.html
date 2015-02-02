@@ -1,0 +1,28 @@
+{{right_sidebar_enabled=True}}
+{{extend 'layout.html'}}
+<head>
+    <style type="text/css">
+        section{
+               background-color: #BEBEBE;
+        }
+        
+        </style>
+</head>
+<section>
+<h2>
+    Rate a Professor
+</h2>
+{{=form}}
+{{block r_sidebar}}
+    <h3>
+        Scale:
+    </h3>
+    <p>0 = Horrible</p>
+    <p>1 = Poor</p>
+    <p>2 = Fair</p>
+    <p>3 = Satisfactory</p>
+    <p>4 = Very Good</p>
+    <p>5 = Excellent</p>
+    {{end}}
+    
+</section>
